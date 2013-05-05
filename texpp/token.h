@@ -85,6 +85,13 @@ public:
                 );
     }
 
+    /** @defgroup Token_getters_setters
+    *
+    * Getters and setters of Token class
+    *
+    */
+    /** @addtogroup Token_getters_setters */
+    /*@{*/
     Type type() const { return m_type; }
     void setType(Type type) { m_type = type; }
 
@@ -132,6 +139,17 @@ public:
     }
     shared_ptr<string> fileNamePtr() const { return m_fileName; }
 
+    /*@}*/
+
+    /** @defgroup Token_debug
+     *
+     * Debug methods of Token.
+     * Different ways of representation and human-like informative things
+     *
+     */
+    /** @addtogroup Token_debug */
+    /*@{*/
+
     string texRepr(Parser* parser = NULL) const;
     string meaning(Parser* parser = NULL) const;
     string repr() const;
@@ -147,21 +165,36 @@ public:
                                 Parser* parser = NULL, bool space = false);
     static string texReprList(const Token::list& tokens,
             Parser* parser = NULL, bool param = false, size_t limit = 0);
-
+    /*@}*/
 protected:
-    Type        m_type;
-    CatCode     m_catCode;
+    Type        m_type; ///< categories of cat_codes
+    CatCode     m_catCode; ///< role of the token
+
+    /**
+     * Difference between source and value is pretty light. Usually they are
+     * the same. Generally Token describes a atomic parse element.
+     *
+     * value examples: "\\tracingonline", "=", "2", " ", "\\show", "\\x",
+     * "\\par", "a", "`", "\r"
+     *
+     * Source usually the same except some cases which is represented by pairs
+     * (value, source):
+     * ("\\par", "\n"), ("\r", "\n"), (" ", "\n")
+     *
+     * That's why I assume that value it's a tex representation of source data.
+     */
     string      m_value;
     string      m_source;
 
-    size_t      m_linePos;
-    size_t      m_lineNo;
-    size_t      m_charPos;
-    size_t      m_charEnd;
+    /// Document coordinates of the token
+    size_t      m_linePos; ///< count of characters preceding this line
+    size_t      m_lineNo; ///< line position in the original source-file
+    size_t      m_charPos; ///< start position relative to the original line
+    size_t      m_charEnd; ///< end position relative to the original file
 
     bool        m_lastInLine;
 
-    shared_ptr<string> m_fileName;
+    shared_ptr<string> m_fileName; ///< filename where token comes from
 
     static string EMPTY_STRING;
 };

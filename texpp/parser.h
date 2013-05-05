@@ -328,10 +328,35 @@ protected:
     vector< ConditionalInfo >
                     m_conditionals;
 
+    /**
+     * @todo: need more information about structural elements
+     *
+     * @brief: container of registered parser symbols
+     * @name: @SymbolsTable
+     *
+     * Contains all registered in base/base.cc parser symbols organized as
+     * unordered_map<@TablePair = pair<@Key, pair<@GropLevel, @Value>>>. Here a few rules of it
+     * behavior, hope in a one moment it become clean what it's exists for...
+     *
+     ** @GoupLevel, information:
+     * default > 0
+     *
+     * if   > @GoupLevel == m_groupLevel || (global && @GoupLevel >= 0)
+     * then > @GoupLevel = -1;
+     *
+     * if   > if(!global && @GropLevel != m_groupLevel) {
+     * then > @SymbolsStack.push_back(@TablePair);
+     * then > @GoupLevel = m_groupLevel
+     *
+     */
     typedef unordered_map<
         string, pair< int, any >
     > SymbolTable;
 
+    /**
+     * @todo: need more information about structural elements
+     * @name: @SymbolsStack
+     */
     typedef vector<
         pair<string, pair<int, any> >
     > SymbolStack;
